@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bankease-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bankease_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - bankease_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - bankease-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bankease-backend
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      JWT_SECRET: BankEaseSecretKeyMustBe256BitsLong_ChangeInProduction_2024!
+      CORS_ORIGINS: http://localhost:4200
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bankease_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bankease-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bankease-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - bankease-network
+
+networks:
+  bankease-network:
+    driver: bridge
+
+volumes:
+  bankease_mysql_data:
