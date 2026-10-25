@@ -1,0 +1,89 @@
+# ===================================================
+# BankEase Application Configuration
+# ===================================================
+spring:
+  application:
+    name: bankease-api
+
+  # DataSource
+  datasource:
+    url: jdbc:mysql://localhost:3306/bankease_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+
+  # JPA / Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Kolkata
+
+  # Mail (configure with real SMTP for production)
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:noreply@bankease.com}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# Server
+server:
+  port: 8080
+  error:
+    include-message: never
+    include-stacktrace: never
+
+# JWT Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:BankEaseSecretKey2024!@#$%^&*()_+BankEaseSecretKey2024!@#$%^&*()}
+    expiration: 900000       # 15 minutes
+    refresh-expiration: 604800000  # 7 days
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:4200}
+  rate-limit:
+    capacity: 20
+    refill-tokens: 20
+    refill-period-seconds: 60
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging
+logging:
+  level:
+    com.bankease: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method

@@ -164,12 +164,12 @@ public class BillPayService {
         return BillerResponse.builder()
                 .id(b.getId())
                 .billerName(b.getBillerName())
-                .category(b.getCategory())
+                .category(b.getCategory().name())
                 .consumerId(b.getConsumerId())
                 .consumerName(b.getConsumerName())
                 .nickname(b.getNickname())
                 .dueAmount(b.getDueAmount())
-                .dueDate(b.getDueDate())
+                .dueDate(b.getDueDate() != null ? b.getDueDate().toLocalDate() : null)
                 .status(b.getStatus().name())
                 .build();
     }

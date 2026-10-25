@@ -118,7 +118,6 @@ public class AccountService {
     private AccountResponse mapToResponse(Account account) {
         return AccountResponse.builder()
                 .id(account.getId())
-                .userId(account.getUserId())
                 .accountNumber(account.getAccountNumber())
                 .accountType(account.getAccountType().name())
                 .balance(account.getBalance())
@@ -126,8 +125,7 @@ public class AccountService {
                 .currency(account.getCurrency())
                 .status(account.getStatus().name())
                 .ifscCode(account.getIfscCode())
-                .branchName(account.getBranchName())
-                .openedAt(account.getOpenedAt())
+                .createdAt(account.getCreatedAt())
                 .build();
     }
 }

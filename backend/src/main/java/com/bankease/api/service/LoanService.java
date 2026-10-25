@@ -129,7 +129,7 @@ public class LoanService {
         return LoanResponse.builder()
                 .id(loan.getId())
                 .loanNumber(loan.getLoanNumber())
-                .loanType(loan.getLoanType())
+                .loanType(loan.getLoanType().name())
                 .principalAmount(loan.getPrincipalAmount())
                 .outstandingAmount(loan.getOutstandingAmount())
                 .interestRate(loan.getInterestRate())

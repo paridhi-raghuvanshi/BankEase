@@ -46,13 +46,14 @@ public class SecurityConfig {
 
     /** Public endpoints that require no authentication. */
     private static final String[] PUBLIC_ENDPOINTS = {
+            "/v1/auth/**",
             "/api/v1/auth/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/v3/api-docs.yaml",
-            "/actuator/health",
-            "/actuator/info"
+            "/actuator/**",
+            "/h2-console/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

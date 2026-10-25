@@ -1,6 +1,6 @@
 package com.bankease.api.dto.request;
 
-import com.bankease.api.model.enums.InterestPayoutType;
+import com.bankease.api.entity.FixedDeposit.InterestPayoutType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

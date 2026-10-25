@@ -1,5 +1,7 @@
 package com.bankease.api.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PagedResponse<T> {
 
     private List<T> content;
@@ -24,14 +28,7 @@ public class PagedResponse<T> {
     private int totalPages;
     private boolean last;
 
-    private PagedResponse(List<T> content, int page, int size, long totalElements, int totalPages, boolean last) {
-        this.content = content;
-        this.page = page;
-        this.size = size;
-        this.totalElements = totalElements;
-        this.totalPages = totalPages;
-        this.last = last;
-    }
+    // AllArgsConstructor provided by Lombok
 
     /**
      * Constructs a {@link PagedResponse} from a Spring Data {@link Page}.

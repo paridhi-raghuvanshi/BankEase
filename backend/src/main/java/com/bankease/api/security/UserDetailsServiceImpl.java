@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         log.debug("Attempting to load user by email: {}", email);
 
-        com.bankease.api.model.User user = userRepository.findByEmail(email)
+        com.bankease.api.entity.User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.warn("User not found with email: {}", email);
                     return new UsernameNotFoundException(
@@ -52,19 +52,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 });
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
         log.debug("Successfully loaded user '{}' with {} role(s)", email, authorities.size());
+
+        boolean isLocked = user.getStatus() == com.bankease.api.entity.User.UserStatus.LOCKED;
+        boolean isEnabled = user.getStatus() == com.bankease.api.entity.User.UserStatus.ACTIVE;
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .authorities(authorities)
-                .accountExpired(!user.isAccountNonExpired())
-                .accountLocked(!user.isAccountNonLocked())
-                .credentialsExpired(!user.isCredentialsNonExpired())
-                .disabled(!user.isEnabled())
+                .accountExpired(false)
+                .accountLocked(isLocked)
+                .credentialsExpired(false)
+                .disabled(!isEnabled)
                 .build();
     }
 }

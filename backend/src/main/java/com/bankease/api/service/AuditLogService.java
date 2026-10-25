@@ -53,7 +53,7 @@ public class AuditLogService {
         try {
             AuditLog auditLog = AuditLog.builder()
                     .userId(userId)
-                    .email(email)
+                    .userEmail(email)
                     .action(action)
                     .description(description)
                     .entityType(entityType)

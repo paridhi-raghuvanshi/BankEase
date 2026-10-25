@@ -96,8 +96,18 @@ public class JwtTokenProvider {
      * @param userDetails the authenticated user's details
      * @return a compact, signed JWT refresh token string
      */
+    public String generateRefreshTokenValue() {
+        return java.util.UUID.randomUUID().toString();
+    }
+
+    public int getRefreshTokenValidityDays() {
+        return (int) (refreshTokenExpirationMs / (1000 * 60 * 60 * 24));
+    }
+
+    public long getAccessTokenValiditySeconds() {
+        return accessTokenExpirationMs / 1000;
+    }
     public String generateRefreshToken(UserDetails userDetails) {
-        log.debug("Generating refresh token for user: {}", userDetails.getUsername());
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_TYPE, TYPE_REFRESH);
         return buildToken(userDetails.getUsername(), claims, refreshTokenExpirationMs);
